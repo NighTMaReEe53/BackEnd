@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "carts",
+  "collectionName": "favourites",
   "info": {
-    "singularName": "cart",
-    "pluralName": "carts",
-    "displayName": "cart",
+    "singularName": "favourite",
+    "pluralName": "favourites",
+    "displayName": "Favourite",
     "description": ""
   },
   "options": {
@@ -12,23 +12,11 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "username": {
-      "type": "string"
-    },
-    "email": {
-      "type": "email"
-    },
-    "new_qty": {
-      "type": "integer"
-    },
-    "id_product_custom": {
-      "type": "integer"
-    },
-    "user": {
+    "users": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "carts"
+      "inversedBy": "favourites"
     },
     "products": {
       "type": "relation",

@@ -775,6 +775,16 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::cart.cart'
     >;
+    favourites: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::favourite.favourite'
+    >;
+    orders: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::order.order'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -804,11 +814,6 @@ export interface ApiCartCart extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    products: Attribute.Relation<
-      'api::cart.cart',
-      'oneToMany',
-      'api::product.product'
-    >;
     username: Attribute.String;
     email: Attribute.Email;
     new_qty: Attribute.Integer;
@@ -817,6 +822,11 @@ export interface ApiCartCart extends Schema.CollectionType {
       'api::cart.cart',
       'manyToOne',
       'plugin::users-permissions.user'
+    >;
+    products: Attribute.Relation<
+      'api::cart.cart',
+      'oneToMany',
+      'api::product.product'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -870,18 +880,66 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
   };
 }
 
-export interface ApiOrderOrder extends Schema.CollectionType {
-  collectionName: 'orders';
+export interface ApiFavouriteFavourite extends Schema.CollectionType {
+  collectionName: 'favourites';
   info: {
-    singularName: 'order';
-    pluralName: 'orders';
-    displayName: 'order';
+    singularName: 'favourite';
+    pluralName: 'favourites';
+    displayName: 'Favourite';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    stripeid: Attribute.String;
+    users: Attribute.Relation<
+      'api::favourite.favourite',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    products: Attribute.Relation<
+      'api::favourite.favourite',
+      'oneToMany',
+      'api::product.product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::favourite.favourite',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::favourite.favourite',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiOrderOrder extends Schema.CollectionType {
+  collectionName: 'orders';
+  info: {
+    singularName: 'order';
+    pluralName: 'orders';
+    displayName: 'Order';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    city: Attribute.String;
+    street: Attribute.String;
+    phone: Attribute.Integer;
+    user: Attribute.Relation<
+      'api::order.order',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
     products: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1014,6 +1072,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
+      'api::favourite.favourite': ApiFavouriteFavourite;
       'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
       'api::sub-category.sub-category': ApiSubCategorySubCategory;
